@@ -23,7 +23,7 @@ class SalesItemController extends Controller
     public function create()
     {
         //
-        abort(404);
+        return view('sales.create');
     }
 
     /**
@@ -88,8 +88,11 @@ class SalesItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sales_Item $sales_Item)
+    public function destroy($id)
     {
-        //
+        $salesItem = Sales_Item::findOrFail(id: $id);
+        $salesItem->delete();
+
+        return redirect()->route('sales.index')->with('success', 'Sales item deleted successfully.');
     }
 }

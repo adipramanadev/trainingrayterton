@@ -17,7 +17,7 @@
                             <h4>Sales</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('sales.items.store') }}" method="post">
+                            <form action="#" method="post">
                                 @csrf
                                 @method('POST')
                                 <div class="form-group">
