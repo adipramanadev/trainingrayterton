@@ -39,4 +39,5 @@ Route::delete('destroy-category/{id}',[App\Http\Controllers\CategoryController::
 Route::get('edit-category/{id}',[App\Http\Controllers\CategoryController::class,'edit'])->name('category.edit');
 Route::put('update-category/{id}', [App\Http\Controllers\CategoryController::class,'update'])->name('category.update');
 
-
+//sales routing
+Route::get('sales', [App\Http\Controllers\SalesController::class, 'index'])->name('sales.index');
