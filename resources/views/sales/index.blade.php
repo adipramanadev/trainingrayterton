@@ -41,7 +41,7 @@
                                                 <td>
                                                     <!-- Button trigger Edit Modal -->
                                                     <button type="button" class="btn btn-warning btn-sm"
-                                                        data-toggle="modal" data-target="#editSaleModal{{ $sale->id }}">
+                                                        data-toggle="modal" data-backdrop="false" data-target="#editSaleModal{{ $sale->id }}">
                                                         Edit
                                                     </button>
                                                 </td>
