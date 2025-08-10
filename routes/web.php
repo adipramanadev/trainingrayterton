@@ -29,3 +29,6 @@ Route::post('storebook', [App\Http\Controllers\BookController::class, 'store'])-
 Route::delete('destroybook/{id}',[App\Http\Controllers\BookController::class,'destroy'])->name('book.destroy');
 Route::get('edit/{id}',[App\Http\Controllers\BookController::class,'edit'])->name('book.edit');
 Route::put('update/{id}', [App\Http\Controllers\BookController::class,'update'])->name('book.update');
+
+//rute category
+Route::get('category', [App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
