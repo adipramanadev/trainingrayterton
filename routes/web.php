@@ -32,3 +32,4 @@ Route::put('update/{id}', [App\Http\Controllers\BookController::class,'update'])
 
 //rute category
 Route::get('category', [App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
+Route::get('create-category', [App\Http\Controllers\CategoryController::class, 'create'])->name('category.create');

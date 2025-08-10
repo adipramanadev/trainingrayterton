@@ -12,8 +12,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
-        return view('categories.index');
+        //ini mengambail data dari model Category
+        $category = Category::all(); //select * from categories (fungsi SQL)
+        return view('categories.index', compact('category'));
     }
 
     /**
@@ -21,7 +22,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        //panggil view create
+        return view('categories.create');
     }
 
     /**
