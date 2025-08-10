@@ -14,6 +14,7 @@ class SalesItemController extends Controller
     public function index()
     {
         //
+        abort(404);
     }
 
     /**
@@ -22,7 +23,7 @@ class SalesItemController extends Controller
     public function create()
     {
         //
-        abort(404);
+        return view('sales.create');
     }
 
     /**
@@ -56,12 +57,8 @@ class SalesItemController extends Controller
         // Buat item penjualan baru
         Sales_Item::create($validatedData);
 
-        // Di dunia nyata, Anda akan memperbarui total di tabel 'sales' di sini.
-        // $sale->total += $validatedData['quantity'] * $validatedData['price'];
-        // $sale->save();
-
+        // Update total penjualan
         return redirect()->route('sales.index')->with('success', 'Sales item added successfully.');
-        // return redirect()->route('sales.index')->with('success', 'Sales item added successfully.');
     }
 
     /**
@@ -91,8 +88,11 @@ class SalesItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sales_Item $sales_Item)
+    public function destroy($id)
     {
-        //
+        $salesItem = Sales_Item::findOrFail(id: $id);
+        $salesItem->delete();
+
+        return redirect()->route('sales.index')->with('success', 'Sales item deleted successfully.');
     }
 }
