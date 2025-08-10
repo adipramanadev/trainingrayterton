@@ -1,7 +1,3 @@
-oke, aku buatin **README.md** untuk repo training PT Rayterton ini, berdasarkan analisa & skema POS yang tadi kita bahas.
-Strukturnya aku buat profesional tapi tetap jelas untuk materi pelatihan.
-
----
 
 ```markdown
 # 🛒 Mini Project POS – Training PT Rayterton
