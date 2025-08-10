@@ -10,12 +10,26 @@
             <h1>Sales Index</h1>
         </div>
         <div class="section-body">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Sales</h4>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Sales</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>List of sales goes here...</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p>List of sales goes here...</p>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Sales Details</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Details of selected sales goes here...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
