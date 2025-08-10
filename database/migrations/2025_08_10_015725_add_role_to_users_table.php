@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            //add role di table users
+            $table->enum('role', ['admin', 'kasir'])->nullable()->default('kasir');
         });
     }
 
@@ -22,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            //fungsi membatalkan penambahan kolom role
+            $table->dropColumn('role');
         });
     }
 };
