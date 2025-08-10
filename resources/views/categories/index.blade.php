@@ -15,9 +15,15 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                           <a href="{{route('category.create')}}" class="btn btn-outline-primary">Tambah Kategori</a>
+                            <a href="{{ route('category.create') }}" class="btn btn-outline-primary">Tambah Kategori</a>
                         </div>
                         <div class="card-body">
+                            @if (session('success'))
+                                <div class="alert alert-success">{{ session('success') }}</div>
+                            @endif
+                            @if (session('error'))
+                                <div class="alert alert-danger">{{ session('error') }}</div>
+                            @endif
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped">
                                     <thead>
@@ -31,7 +37,7 @@
                                         @forelse ($category as $item)
                                             {{-- nanti ada datanya  --}}
                                             <tr>
-                                                <td>{{$loop->iteration}}</td>
+                                                <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->name }}</td>
                                                 <td>&nbsp;</td>
                                             </tr>

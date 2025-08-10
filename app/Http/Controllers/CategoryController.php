@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,13 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         //
+        $cat = $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name',
+        ]);
+        Category::create($cat);
+
+        return redirect()->route('category.index')
+                         ->with('success', 'berhasil.');
     }
 
     /**
