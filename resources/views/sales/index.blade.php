@@ -57,7 +57,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($sales as $sale)
+                                    @foreach($salesitem as $sale)
                                         <tr>
                                             <td>{{ $sale->product->name }}</td>
                                             <td>{{ $sale->quantity }}</td>

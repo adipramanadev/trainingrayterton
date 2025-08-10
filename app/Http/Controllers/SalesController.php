@@ -15,10 +15,10 @@ class SalesController extends Controller
     public function index()
     {
         //
-        $sales = Sales::all();
+        // $sales = Sales::all();
         $salesitem = Sales_Item::all();
         $products = Product::all();
-        return view('sales.index', compact('sales', 'products','salesitem'));
+        return view('sales.index', compact( 'products','salesitem'));
     }
 
     /**
