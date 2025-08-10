@@ -14,6 +14,7 @@ class SalesItemController extends Controller
     public function index()
     {
         //
+        abort(404);
     }
 
     /**
@@ -56,12 +57,8 @@ class SalesItemController extends Controller
         // Buat item penjualan baru
         Sales_Item::create($validatedData);
 
-        // Di dunia nyata, Anda akan memperbarui total di tabel 'sales' di sini.
-        // $sale->total += $validatedData['quantity'] * $validatedData['price'];
-        // $sale->save();
-
+        // Update total penjualan
         return redirect()->route('sales.index')->with('success', 'Sales item added successfully.');
-        // return redirect()->route('sales.index')->with('success', 'Sales item added successfully.');
     }
 
     /**
