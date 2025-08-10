@@ -1,61 +1,167 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+oke, aku buatin **README.md** untuk repo training PT Rayterton ini, berdasarkan analisa & skema POS yang tadi kita bahas.
+Strukturnya aku buat profesional tapi tetap jelas untuk materi pelatihan.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+---
 
-## About Laravel
+```markdown
+# 🛒 Mini Project POS – Training PT Rayterton
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Proyek ini adalah **materi pelatihan Laravel + Flutter** untuk membuat aplikasi **Point of Sale (POS)** sederhana.  
+Backend menggunakan **Laravel** (REST API + Laravel Sanctum) dan frontend menggunakan **Flutter**.  
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🎯 Tujuan Training
+- Memahami pembuatan REST API dengan Laravel.
+- Menerapkan autentikasi berbasis token menggunakan Laravel Sanctum.
+- Mendesain database relasional untuk sistem POS.
+- Menghubungkan backend Laravel dengan frontend Flutter.
+- Mengimplementasikan proses transaksi penjualan dengan pengurangan stok otomatis.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🗂️ Fitur Utama
+- **Login & Logout** (kasir & admin)
+- **Manajemen Produk** (CRUD produk & kategori)
+- **Transaksi Penjualan** (keranjang → bayar → stok berkurang)
+- **Laporan Harian** (total penjualan & jumlah transaksi per tanggal)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 📦 Struktur Database & Analisa
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. **Tabel `users`**
+Menyimpan data akun pengguna sistem:
+- `id`, `name`, `email`, `password`
+- `role` → `admin` atau `cashier`
+- Relasi: **1 user** → banyak **sales**.
 
-## Laravel Sponsors
+### 2. **Tabel `categories`**
+Mengelompokkan produk:
+- `id`, `name`
+- Relasi: **1 kategori** → banyak **products**.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 3. **Tabel `products`**
+Data barang yang dijual:
+- `sku`, `name`, `category_id`, `price`, `stock`
+- Relasi: **1 produk** → banyak **sale_items**.
 
-### Premium Partners
+### 4. **Tabel `sales`**
+Data transaksi per nota:
+- `user_id`, `total`, `paid`, `change`, `note`
+- Relasi: **1 sale** → banyak **sale_items**.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 5. **Tabel `sale_items`**
+Detail barang dalam transaksi:
+- `sale_id`, `product_id`, `qty`, `price`
+- Menghubungkan produk & penjualan (many-to-many).
 
-## Contributing
+**ERD Singkat:**
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+users (1) ----< sales (N)
+products (1) ----< sale\_items (N) >---- (1) sales
+categories (1) ----< products (N)
 
-## Code of Conduct
+````
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🛠️ Teknologi
+### Backend
+- PHP 8.x
+- Laravel 11
+- Laravel Sanctum (Auth Token)
+- MySQL/MariaDB
+- Composer
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Frontend
+- Flutter 3.x
+- Provider (State Management)
+- Dio (HTTP Client)
+- Shared Preferences (Local Storage)
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🚀 Instalasi Backend (Laravel)
+1. Clone repo:
+   ```bash
+   git clone https://github.com/adipramanadev/trainingrayterton.git
+   cd trainingrayterton/backend
+````
+
+2. Install dependencies:
+
+   ```bash
+   composer install
+   ```
+3. Copy `.env`:
+
+   ```bash
+   cp .env.example .env
+   ```
+4. Atur koneksi database di `.env`.
+5. Jalankan migrasi & seeder:
+
+   ```bash
+   php artisan migrate --seed
+   ```
+6. Jalankan server:
+
+   ```bash
+   php artisan serve
+   ```
+
+---
+
+## 📱 Instalasi Frontend (Flutter)
+
+1. Masuk folder frontend:
+
+   ```bash
+   cd ../frontend
+   ```
+2. Install dependencies:
+
+   ```bash
+   flutter pub get
+   ```
+3. Jalankan:
+
+   ```bash
+   flutter run
+   ```
+
+---
+
+## 🔄 Alur Proses Utama
+
+1. **Login** → dapatkan token kasir/admin.
+2. **Pilih Produk** → tambah ke keranjang.
+3. **Checkout** → hitung total, bayar, stok berkurang.
+4. **Laporan Harian** → filter penjualan berdasarkan tanggal.
+
+---
+
+## 🧪 Pengujian (Test Case)
+
+* **Auth**: Login valid & invalid.
+* **Produk**: Tambah produk duplikat SKU → error.
+* **Transaksi**:
+
+  * Stok cukup → berhasil, stok berkurang.
+  * Stok kurang → error 422.
+  * Bayar < total → error 422.
+* **Laporan**: Cek penjualan sesuai tanggal.
+
+---
+
+## 📄 Lisensi
+
+Materi ini digunakan untuk kebutuhan **Training Internal PT Rayterton**.
+
+```
+
+---
+
+Kalau mau, aku bisa sekalian **tambahkan diagram ERD PNG** di README ini supaya trainee punya gambaran visual database-nya.  
+Kamu mau aku buatkan diagramnya sekalian?
+```
