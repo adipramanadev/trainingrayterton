@@ -21,6 +21,7 @@ class SalesItemController extends Controller
     public function create()
     {
         //
+        abort(404);
     }
 
     /**
@@ -28,7 +29,23 @@ class SalesItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //isi function sale itemnya
+        $validated = $request->validate([
+            'sales_id' => 'required|exists:sales,id',
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        // Sales_Item::create($validated);
+        $salesItem = new Sales_Item($validated);
+        $salesItem->sales_id = 1;
+        $salesItem->product_id = $validated['product_id'];
+        $salesItem->quantity = $validated['quantity'];
+        $salesItem->price = $validated['price'];
+        $salesItem->save();
+
+        return redirect()->route('sales.index')->with('success', 'Sales item added successfully.');
     }
 
     /**

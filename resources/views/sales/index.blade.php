@@ -17,11 +17,16 @@
                             <h4>Sales</h4>
                         </div>
                         <div class="card-body">
-                            <form action="#" method="post">
+                            <form action="{{ route('sales.items.store') }}" method="post">
                                 @csrf
+                                @method('POST')
                                 <div class="form-group">
                                     <label for="product">Product</label>
-                                    <input type="text" name="product" class="form-control" id="product" placeholder="Product">
+                                    <select name="product_id" class="form-control" id="product">
+                                        @foreach($products as $product)
+                                            <option value="{{ $product->id }}" data-price="{{ $product->price }}">{{ $product->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="quantity">Quantity</label>
@@ -29,7 +34,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="price">Price</label>
-                                    <input type="text" name="price" class="form-control" id="price" placeholder="Price">
+                                    <input type="text" name="price" class="form-control" id="price" readonly placeholder="Price">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Add Sale</button>
                             </form>
@@ -69,3 +74,15 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        // add price from product selection
+        document.getElementById('product').addEventListener('change', function() {
+            var selectedProduct = this.options[this.selectedIndex];
+            var price = selectedProduct.getAttribute('data-price');
+            document.getElementById('price').value = price;
+        });
+
+    </script>
+@endpush
