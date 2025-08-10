@@ -155,9 +155,3 @@ categories (1) ----< products (N)
 Materi ini digunakan untuk kebutuhan **Training Internal PT Rayterton**.
 
 ```
-
----
-
-Kalau mau, aku bisa sekalian **tambahkan diagram ERD PNG** di README ini supaya trainee punya gambaran visual database-nya.  
-Kamu mau aku buatkan diagramnya sekalian?
-```
