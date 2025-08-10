@@ -41,3 +41,6 @@ Route::put('update-category/{id}', [App\Http\Controllers\CategoryController::cla
 
 //sales routing
 Route::get('sales', [App\Http\Controllers\SalesController::class, 'index'])->name('sales.index');
+
+//route sales item
+Route::post('sales/items', [App\Http\Controllers\SalesItemController::class, 'store'])->name('sales.items.store');

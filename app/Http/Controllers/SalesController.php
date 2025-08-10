@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sales;
+use App\Models\Product;
+use App\Models\Sales_Item;
 use Illuminate\Http\Request;
 
 class SalesController extends Controller
@@ -13,7 +15,10 @@ class SalesController extends Controller
     public function index()
     {
         //
-        return view('sales.index');
+        // $sales = Sales::all();
+        $salesitem = Sales_Item::all();
+        $products = Product::all();
+        return view('sales.index', compact( 'products','salesitem'));
     }
 
     /**

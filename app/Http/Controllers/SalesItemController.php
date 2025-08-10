@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sales_Item;
+use App\Models\Sales;
 use Illuminate\Http\Request;
 
 class SalesItemController extends Controller
@@ -21,6 +22,7 @@ class SalesItemController extends Controller
     public function create()
     {
         //
+        abort(404);
     }
 
     /**
@@ -28,7 +30,38 @@ class SalesItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //isi function sale itemnya
+        $validatedData = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        
+        $sale = Sales::firstOrCreate(
+            [
+                'user_id' => 1, // Menggunakan ID pengguna yang sedang login
+                // Anda bisa menambahkan kondisi lain di sini, misalnya 'status' => 'pending'
+            ],
+            [
+                'total' => 0, // Inisialisasi total
+                'paid' => 0,
+                'change' => 0,
+            ]
+        );
+
+        // Tambahkan data 'sale_id' ke data yang divalidasi
+        $validatedData['sale_id'] = $sale->id;
+
+        // Buat item penjualan baru
+        Sales_Item::create($validatedData);
+
+        // Di dunia nyata, Anda akan memperbarui total di tabel 'sales' di sini.
+        // $sale->total += $validatedData['quantity'] * $validatedData['price'];
+        // $sale->save();
+
+        return redirect()->route('sales.index')->with('success', 'Sales item added successfully.');
+        // return redirect()->route('sales.index')->with('success', 'Sales item added successfully.');
     }
 
     /**

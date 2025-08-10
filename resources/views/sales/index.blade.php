@@ -17,7 +17,27 @@
                             <h4>Sales</h4>
                         </div>
                         <div class="card-body">
-                            <p>List of sales goes here...</p>
+                            <form action="{{ route('sales.items.store') }}" method="post">
+                                @csrf
+                                @method('POST')
+                                <div class="form-group">
+                                    <label for="product">Product</label>
+                                    <select name="product_id" class="form-control" id="product">
+                                        @foreach($products as $product)
+                                            <option value="{{ $product->id }}" data-price="{{ $product->price }}">{{ $product->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" name="quantity" class="form-control" id="quantity" placeholder="Quantity">
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">Price</label>
+                                    <input type="text" name="price" class="form-control" id="price" readonly placeholder="Price">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add Sale</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -27,7 +47,26 @@
                             <h4>Sales Details</h4>
                         </div>
                         <div class="card-body">
-                            <p>Details of selected sales goes here...</p>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($salesitem as $sale)
+                                        <tr>
+                                            <td>{{ $sale->product->name }}</td>
+                                            <td>{{ $sale->quantity }}</td>
+                                            <td>{{ $sale->price }}</td>
+                                            <td>{{ $sale->quantity * $sale->price }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -35,3 +74,15 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        // add price from product selection
+        document.getElementById('product').addEventListener('change', function() {
+            var selectedProduct = this.options[this.selectedIndex];
+            var price = selectedProduct.getAttribute('data-price');
+            document.getElementById('price').value = price;
+        });
+
+    </script>
+@endpush
