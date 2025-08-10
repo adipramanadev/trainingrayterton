@@ -35,11 +35,18 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($category as $item)
-                                            {{-- nanti ada datanya  --}}
+                                            {{-- make edit delete --}}
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->name }}</td>
-                                                <td>&nbsp;</td>
+                                                <td>
+                                                    <a href="{{ route('category.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                                    <form action="{{ route('category.destroy', $item->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                                    </form>
+                                                </td>
                                             </tr>
                                         @empty
                                             <tr>
