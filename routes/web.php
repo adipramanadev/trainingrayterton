@@ -33,3 +33,10 @@ Route::put('update/{id}', [App\Http\Controllers\BookController::class,'update'])
 //rute category
 Route::get('category', [App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
 Route::get('create-category', [App\Http\Controllers\CategoryController::class, 'create'])->name('category.create');
+Route::post('store-category',[App\Http\Controllers\CategoryController::class, 'store'])->name('category.store');
+//delete
+Route::delete('destroy-category/{id}',[App\Http\Controllers\CategoryController::class,'destroy'])->name('category.destroy');
+Route::get('edit-category/{id}',[App\Http\Controllers\CategoryController::class,'edit'])->name('category.edit');
+Route::put('update-category/{id}', [App\Http\Controllers\CategoryController::class,'update'])->name('category.update');
+
+
