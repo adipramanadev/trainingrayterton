@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('sales__items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('sale_id')->constrained('sales')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->unsignedInteger('quantity'); // jumlah produk yang dibeli
+            $table->decimal('price', 5, 2)->nullable(); // harga produk pada saat transaksi
             $table->timestamps();
+            $table->index(['sale_id', 'product_id']); // untuk memfilter item per penjualan
         });
     }
 
