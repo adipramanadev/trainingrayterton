@@ -11,6 +11,18 @@
         </div>
         <div class="section-body">
             <div class="card">
+                {{-- pesan successfully --}}
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                {{-- pesan error --}}
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div class="card-header">
                     <a href="{{ route('product.create') }}" class="btn btn-outline-primary">Create Product</a>
                 </div>
