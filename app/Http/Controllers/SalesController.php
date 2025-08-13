@@ -18,7 +18,7 @@ class SalesController extends Controller
         // $sales = Sales::all();
         $salesitem = Sales_Item::all();
         $products = Product::all();
-        return view('sales.create', compact( 'products','salesitem'));
+        return view('sales.index', compact( 'products','salesitem'));
     }
 
     /**

@@ -39,6 +39,14 @@ Route::delete('destroy-category/{id}',[App\Http\Controllers\CategoryController::
 Route::get('edit-category/{id}',[App\Http\Controllers\CategoryController::class,'edit'])->name('category.edit');
 Route::put('update-category/{id}', [App\Http\Controllers\CategoryController::class,'update'])->name('category.update');
 
+//product route
+Route::get('product', [App\Http\Controllers\ProductController::class, 'index'])->name('product.index');
+Route::get('create-product', [App\Http\Controllers\ProductController::class, 'create'])->name('product.create');
+Route::post('store-product', [App\Http\Controllers\ProductController::class, 'store'])->name('product.store');
+Route::delete('destroy-product/{id}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('product.destroy');
+Route::get('edit-product/{id}', [App\Http\Controllers\ProductController::class, 'edit'])->name('product.edit');
+Route::put('update-product/{id}', [App\Http\Controllers\ProductController::class, 'update'])->name('product.update');
+
 //sales routing
 Route::get('sales', [App\Http\Controllers\SalesController::class, 'index'])->name('sales.index');
 
@@ -46,3 +54,4 @@ Route::get('sales', [App\Http\Controllers\SalesController::class, 'index'])->nam
 Route::post('sales/items', [App\Http\Controllers\SalesItemController::class, 'store'])->name('sales.items.store');
 Route::put('sales/items/{id}', [App\Http\Controllers\SalesItemController::class, 'update'])->name('sales.items.update');
 Route::delete('sales/items/{id}', [App\Http\Controllers\SalesItemController::class, 'destroy'])->name('sales.items.destroy');
+
