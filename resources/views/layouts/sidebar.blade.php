@@ -1,3 +1,4 @@
+
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
@@ -19,12 +20,15 @@
                 <a class="nav-link" href="#">
                     <i class="fas fa-th-large"></i> <span>Customers</span></a>
             </li>
-            {{-- login cashier --}}
-            @if (auth()->user()->role === 'cashier')
-                <li><a class="nav-link" href="{{ route('sales.index') }}">
-                        <i class="fas fa-th-large"></i> <span>Sales</span></a>
-                </li>
-            @endif
+            @auth
+                {{-- login cashier --}}
+                @if (auth()->user()->role === 'cashier')
+                    <li><a class="nav-link" href="{{ route('sales.index') }}">
+                            <i class="fas fa-th-large"></i> <span>Sales</span></a>
+                    </li>
+                @endif
+            @endauth
+
         </ul>
     </aside>
 </div>

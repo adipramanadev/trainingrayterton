@@ -21,18 +21,22 @@
 
 <body>
     <div id="app">
+
+
         <div class="main-wrapper">
-            <div class="navbar-bg"></div>
-            {{-- navbar --}}
-            @include('layouts.navbar')
-            {{-- sidebar --}}
-            @include('layouts.sidebar')
+
+            @auth
+                <div class="navbar-bg"></div>
+                @include('layouts.navbar')
+                @include('layouts.sidebar')
+            @endauth
             <!-- Main Content -->
             <div class="main-content">
                 {{-- fungsinya untuk menampilkan data data yang ada di database --}}
-                @yield('content') 
+                @yield('content')
             </div>
             @include('layouts.footer')
+
         </div>
 
     </div>
