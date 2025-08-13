@@ -63,6 +63,7 @@
                                         <td><button type="submit" class="btn btn-primary">Save</button></td>
                                     </tr>
                                 </table>
+                            </form>
                         </div>
                     </div>
                     <div class="card">
@@ -118,64 +119,4 @@
         </div>
         </div>
     </section>
-
-    <!-- Add Modal -->
-    {{-- <div class="modal fade" id="addSaleModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form action="{{ route('sales.items.store') }}" method="POST">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add Sale Item</h5>
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span>&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Product</label>
-                            <select name="product_id" id="product_id" class="form-control">
-                                @foreach ($products as $product)
-                                    <option value="{{ $product->id }}" data-price="{{ $product->price }}">
-                                        {{ $product->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Quantity</label>
-                            <input type="number" name="quantity" id="quantity" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Price</label>
-                            <input type="number" name="price" id="price" readonly class="form-control">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            // Auto fill price in Add modal
-            $('#product_id').on('change', function() {
-                var price = $(this).find(':selected').data('price');
-                $('#price').val(price);
-            });
-
-            // Auto fill price in Edit modals
-            $('[id^="edit_product_id"]').on('change', function() {
-                var price = $(this).find(':selected').data('price');
-                var idSuffix = $(this).attr('id').replace('edit_product_id', '');
-                $('#edit_price' + idSuffix).val(price);
-            });
-        });
-    </script>
-@endpush

@@ -41,46 +41,45 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'currency' => ['nullable', 'string', 'max:100'],
-            'status' => ['nullable', 'string', 'max:100'],
-            'description' => ['nullable', 'string'],
-            'items' => ['required', 'array', 'min:1'],
-            'items.*.product_id' => ['required', 'exists:products,id'],
-            'items.*.quantity' => ['required', 'integer', 'min:1'],
-            'items.*.price' => ['nullable', 'numeric', 'min:0'],
+            'user_id' => auth()->id(),
+            'customer_id' => $validated['customer_id'] ?? null, // aktifkan jika kolomnya ada di tabel sales
+            'currency' => $validated['currency'] ?? null,
+            'status' => $validated['status'] ?? 'input',
+            'description' => $validated['description'] ?? null,
         ]);
 
         $userId = auth()->id(); // kasir yang login
 
         $sale = null;
 
-        DB::transaction(function () use ($validated, $userId, &$sale) {
+        // DB::transaction(function () use ($validated, $userId, &$sale) {
             // 1) Buat 1 record sales
             $sale = Sale::create([
                 'user_id' => $userId,
+                'customer_id' => $validated['customer_id'] ?? null,
                 'currency' => $validated['currency'] ?? null,
                 'status' => $validated['status'] ?? 'input',
                 'description' => $validated['description'] ?? null,
             ]);
 
-            // 2) Masukkan banyak items dengan sale_id yang SAMA
-            $rows = collect($validated['items'])->map(function ($it) use ($sale) {
-                return [
-                    'sale_id' => $sale->id,
-                    'product_id' => $it['product_id'],
-                    'quantity' => $it['quantity'],
-                    'price' => $it['price'] ?? 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            })->all();
+            // // 2) Masukkan banyak items dengan sale_id yang SAMA
+            // $rows = collect($validated['items'])->map(function ($it) use ($sale) {
+            //     return [
+            //         'sale_id' => $sale->id,
+            //         'product_id' => $it['product_id'],
+            //         'quantity' => $it['quantity'],
+            //         'price' => $it['price'] ?? 0,
+            //         'created_at' => now(),
+            //         'updated_at' => now(),
+            //     ];
+            // })->all();
 
             // boleh pakai relation:
             // $sale->items()->createMany($rows);
 
             // atau bulk insert:
-            Sales_Item::insert($rows);
-        });
+            // Sales_Item::insert($rows);
+        // });
         dd($sale);
 
         // return redirect()
