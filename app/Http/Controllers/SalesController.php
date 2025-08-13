@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sales;
+
 use App\Models\Product;
 use App\Models\Sales_Item;
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use App\Models\Sale;
+use App\Models\Sale; // <-- Model yang benar
 use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
@@ -17,14 +17,8 @@ class SalesController extends Controller
      */
     public function index(Request $request)
     {
-        //get currency
-        $currency = $request->input('currency', 'IDR');
-
-        // $sales = Sales::all();
-        $customers = Customer::all();
-        $salesitem = Sales_Item::all();
-        $products = Product::all();
-        return view('sales.index', compact('products', 'salesitem', 'customers'));
+        $sales = Sale::with(['customer', 'user'])->latest()->paginate(10);
+        return view('sales.index', compact('sales'));
     }
 
     /**
@@ -32,7 +26,9 @@ class SalesController extends Controller
      */
     public function create()
     {
-        //
+        $customers = Customer::all();
+        $products = Product::all();
+        return view('sales.create', compact('customers', 'products'));
     }
 
     /**
@@ -41,81 +37,109 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'currency' => ['nullable', 'string', 'max:100'],
-            'status' => ['nullable', 'string', 'max:100'],
+            'customer_id' => ['required', 'exists:customers,id'],
+            'currency' => ['required', 'string', 'max:100'],
             'description' => ['nullable', 'string'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'exists:products,id'],
             'items.*.quantity' => ['required', 'integer', 'min:1'],
-            'items.*.price' => ['nullable', 'numeric', 'min:0'],
+            'items.*.price' => ['required', 'numeric', 'min:0'],
         ]);
-
-        $userId = auth()->id(); // kasir yang login
 
         $sale = null;
 
-        DB::transaction(function () use ($validated, $userId, &$sale) {
-            // 1) Buat 1 record sales
+        DB::transaction(function () use ($validated, &$sale) {
             $sale = Sale::create([
-                'user_id' => $userId,
-                'currency' => $validated['currency'] ?? null,
-                'status' => $validated['status'] ?? 'input',
+                'user_id' => auth()->id(),
+                'customer_id' => $validated['customer_id'],
+                'currency' => $validated['currency'],
+                'status' => 'completed',
                 'description' => $validated['description'] ?? null,
             ]);
 
-            // 2) Masukkan banyak items dengan sale_id yang SAMA
-            $rows = collect($validated['items'])->map(function ($it) use ($sale) {
+            $items = collect($validated['items'])->map(function ($item) use ($sale) {
                 return [
                     'sale_id' => $sale->id,
-                    'product_id' => $it['product_id'],
-                    'quantity' => $it['quantity'],
-                    'price' => $it['price'] ?? 0,
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
-            })->all();
+            });
 
-            // boleh pakai relation:
-            // $sale->items()->createMany($rows);
-
-            // atau bulk insert:
-            Sales_Item::insert($rows);
+            Sales_Item::insert($items->all());
         });
-        dd($sale);
 
-        // return redirect()
-        //     ->route('sales.index')
-        //     ->with('success', "Sale #{$sale->id} berhasil dibuat dengan " . count($validated['items']) . " item.");
+        return redirect()
+            ->route('sales.show', $sale)
+            ->with('success', "Transaksi #{$sale->id} berhasil dibuat.");
     }
+
     /**
      * Display the specified resource.
+     * * @param \App\Models\Sale $sale
+     * @return \Illuminate\Http\Response
      */
-    public function show(Sales $sales)
+    // DIUBAH: dari "Sales $sales" menjadi "Sale $sale"
+    public function show(Sale $sale)
     {
-        //
+        $sale->load(['customer', 'user', 'items.product']);
+        return view('sales.show', compact('sale'));
     }
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param \App\Models\Sale $sale
+     * @return \Illuminate\Http\Response
      */
-    public function edit(Sales $sales)
+    // DIUBAH: dari "Sales $sales" menjadi "Sale $sale"
+    public function edit(Sale $sale)
     {
-        //
+        $customers = Customer::all();
+        return view('sales.edit', compact('sale', 'customers'));
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Sale $sale
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Sales $sales)
+    // DIUBAH: dari "Sales $sales" menjadi "Sale $sale"
+    public function update(Request $request, Sale $sale)
     {
-        //
+        $validated = $request->validate([
+            'customer_id' => ['required', 'exists:customers,id'],
+            'currency' => ['required', 'string', 'max:100'],
+            'description' => ['nullable', 'string'],
+        ]);
+
+        $sale->update($validated);
+
+        return redirect()
+            ->route('sales.show', $sale)
+            ->with('success', "Transaksi #{$sale->id} berhasil diperbarui.");
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param \App\Models\Sale $sale
+     * @return \Illuminate\Http\Response
      */
-    public function destroy(Sales $sales)
+    // DIUBAH: dari "Sales $sales" menjadi "Sale $sale"
+    public function destroy(Sale $sale)
     {
-        //
+        DB::transaction(function () use ($sale) {
+            $sale->items()->delete();
+            $sale->delete();
+        });
+
+        return redirect()
+            ->route('sales.index')
+            ->with('success', "Transaksi #{$sale->id} berhasil dihapus.");
     }
 }

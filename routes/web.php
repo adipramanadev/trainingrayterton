@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BelajarController;
-
+use App\Http\Controllers\SalesController;
 
 //default laravel
 
@@ -45,13 +45,14 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::middleware(['auth', 'role:cashier'])->group(function () {
     
     //sales routing
-    Route::get('sales', [App\Http\Controllers\SalesController::class, 'index'])->name('sales.index');
-    Route::post('sales', [App\Http\Controllers\SalesController::class, 'store'])->name('sales.store');
+    // Route::get('sales', [App\Http\Controllers\SalesController::class, 'index'])->name('sales.index');
+    // Route::post('sales', [App\Http\Controllers\SalesController::class, 'store'])->name('sales.store');
 
-    //route sales item
-    Route::post('sales/items', [App\Http\Controllers\SalesItemController::class, 'store'])->name('sales.items.store');
-    Route::put('sales/items/{id}', [App\Http\Controllers\SalesItemController::class, 'update'])->name('sales.items.update');
-    Route::delete('sales/items/{id}', [App\Http\Controllers\SalesItemController::class, 'destroy'])->name('sales.items.destroy');
+    // //route sales item
+    // Route::post('sales/items', [App\Http\Controllers\SalesItemController::class, 'store'])->name('sales.items.store');
+    // Route::put('sales/items/{id}', [App\Http\Controllers\SalesItemController::class, 'update'])->name('sales.items.update');
+    // Route::delete('sales/items/{id}', [App\Http\Controllers\SalesItemController::class, 'destroy'])->name('sales.items.destroy');
+    Route::resource('sales', SalesController::class);
 });
 
 //manager
