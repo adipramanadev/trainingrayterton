@@ -2,24 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sales;
-use App\Models\Product;
-use App\Models\Sales_Item;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
-class SalesController extends Controller
+class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //get currency 
-       
-        // $sales = Sales::all();
-        $salesitem = Sales_Item::all();
-        $products = Product::all();
-        return view('sales.index', compact( 'products','salesitem'));
+        //
     }
 
     /**
@@ -41,7 +34,7 @@ class SalesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Sales $sales)
+    public function show(Customer $customer)
     {
         //
     }
@@ -49,7 +42,7 @@ class SalesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Sales $sales)
+    public function edit(Customer $customer)
     {
         //
     }
@@ -57,7 +50,7 @@ class SalesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sales $sales)
+    public function update(Request $request, Customer $customer)
     {
         //
     }
@@ -65,7 +58,7 @@ class SalesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sales $sales)
+    public function destroy(Customer $customer)
     {
         //
     }

@@ -50,8 +50,13 @@ Route::put('update-product/{id}', [App\Http\Controllers\ProductController::class
 //sales routing
 Route::get('sales', [App\Http\Controllers\SalesController::class, 'index'])->name('sales.index');
 
+
 //route sales item
 Route::post('sales/items', [App\Http\Controllers\SalesItemController::class, 'store'])->name('sales.items.store');
 Route::put('sales/items/{id}', [App\Http\Controllers\SalesItemController::class, 'update'])->name('sales.items.update');
 Route::delete('sales/items/{id}', [App\Http\Controllers\SalesItemController::class, 'destroy'])->name('sales.items.destroy');
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -78,6 +78,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if ($product->category->products()->exists()) {
+            return back()->with('error', 'Kategori ini masih dipakai oleh produk.');
+        }
+
+
         $product->delete();
         return redirect()->route('product.index')->with('success', 'Product deleted successfully.');
     }
