@@ -17,6 +17,16 @@
                     <h4>Edit Category</h4>
                 </div>
                 <div class="card-body">
+                    {{-- session message errors --}}
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form action="{{ route('category.update', $category->id) }}" method="POST">
                         @csrf
                         @method('PUT')
