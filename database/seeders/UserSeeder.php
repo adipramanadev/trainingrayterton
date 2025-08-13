@@ -17,14 +17,17 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Cashier Name',
                 'email' => 'cashier@example.com',
-                'password' => bcrypt('password')
+                'password' => bcrypt('password'),
+                'role' => 'cashier'
 
             ],
             [
                 'name' => 'Manager Name',
                 'email' => 'manager@example.com',
-                'password' => bcrypt('password')
+                'password' => bcrypt('password'),
+                'role' => 'manager'
             ]
+
         ];
 
         foreach ($users as $user) {
