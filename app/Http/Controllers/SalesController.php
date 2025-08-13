@@ -14,7 +14,8 @@ class SalesController extends Controller
      */
     public function index()
     {
-        //
+        //get currency 
+       
         // $sales = Sales::all();
         $salesitem = Sales_Item::all();
         $products = Product::all();
