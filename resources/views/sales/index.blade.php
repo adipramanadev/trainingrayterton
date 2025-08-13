@@ -14,58 +14,60 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <table class="table table-bordered">
-                                <tr>
-                                    <td>Sales</td>
-                                    <td><input type="text" name="user_id" class="form-control" readonly></td>
-                                </tr>
-                                <tr>
-                                    <td>Customer</td>
-                                    <td>
-                                        <select name="customer_id" id="customer_id" class="form-control">
-                                            <option value="">Select Customer</option>
-                                            @foreach ($customers as $customer)
-                                                <option value="{{ $customer->id }}">{{ $customer->namecustomer }}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Currency</td>
-                                    <td>
-                                        <select name="currency" id="currency" class="form-control">
-                                            <option value="">Select Currency</option>
-                                            <option value="IDR">IDR</option>
-                                            <option value="USD">USD</option>
-                                            <option value="EUR">EUR</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Status</td>
-                                    <td><input type="text" name="status" id="status" class="form-control" readonly>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Description</td>
-                                    <td>
-                                        <textarea name="description" class="form-control" id="" cols="30" rows="100"></textarea>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>&nbsp;</td>
-                                    <td><button type="submit" class="btn btn-primary">Save</button></td>
-                                </tr>
-                            </table>
+                            <form action="{{ route('sales.store') }}" enctype="multipart/form-data" method="POST">
+                                @csrf
+                                @method('POST')
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>Sales</td>
+                                        <td><input type="text" name="user_id" class="form-control"
+                                                value="{{ Auth::user()->name }}" readonly></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Customer</td>
+                                        <td>
+                                            <select name="customer_id" id="customer_id" class="form-control">
+                                                <option value="">Select Customer</option>
+                                                @foreach ($customers as $customer)
+                                                    <option value="{{ $customer->id }}">{{ $customer->namecustomer }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Currency</td>
+                                        <td>
+                                            <select name="currency" id="currency" class="form-control">
+                                                <option value="">Select Currency</option>
+                                                <option value="IDR">IDR</option>
+                                                <option value="USD">USD</option>
+                                                <option value="EUR">EUR</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status</td>
+                                        <td><input type="text" name="status" id="status" class="form-control"
+                                                readonly>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Description</td>
+                                        <td>
+                                            <textarea name="description" class="form-control" id="" cols="30" rows="100"></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><button type="submit" class="btn btn-primary">Save</button></td>
+                                    </tr>
+                                </table>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-header">
                             <!-- Button trigger Add Modal -->
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSaleModal"
-                                href="#">
-                                Add Sale Item
-                            </button>
                         </div>
                         <div class="card-body">
                             <table class="table table-striped">
