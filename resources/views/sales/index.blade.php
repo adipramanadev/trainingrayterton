@@ -14,6 +14,12 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
+                            {{-- pesan success --}}
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
                             <form action="{{ route('sales.store') }}" enctype="multipart/form-data" method="POST">
                                 @csrf
                                 @method('POST')
