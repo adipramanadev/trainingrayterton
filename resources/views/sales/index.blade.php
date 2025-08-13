@@ -20,6 +20,17 @@
                                     <td><input type="text" name="user_id" class="form-control" readonly></td>
                                 </tr>
                                 <tr>
+                                    <td>Customer</td>
+                                    <td>
+                                        <select name="customer_id" id="customer_id" class="form-control">
+                                            <option value="">Select Customer</option>
+                                            @foreach ($customers as $customer)
+                                                <option value="{{ $customer->id }}">{{ $customer->namecustomer }}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>Currency</td>
                                     <td>
                                         <select name="currency" id="currency" class="form-control">
