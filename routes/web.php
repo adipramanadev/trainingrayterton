@@ -46,7 +46,7 @@ Route::middleware(['auth', 'role:cashier'])->group(function () {
     
     //sales routing
     Route::get('sales', [App\Http\Controllers\SalesController::class, 'index'])->name('sales.index');
-
+    Route::post('sales', [App\Http\Controllers\SalesController::class, 'store'])->name('sales.store');
 
     //route sales item
     Route::post('sales/items', [App\Http\Controllers\SalesItemController::class, 'store'])->name('sales.items.store');

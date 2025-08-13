@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo; // <-- Import BelongsTo
+use App\Models\Sale;
 
 class Sales_Item extends Model
 {
@@ -31,5 +32,9 @@ class Sales_Item extends Model
     {
         // This line is a placeholder and would need correct keys to function
         return $this->belongsTo(User::class, 'foreign_key', 'other_key');
+    }
+    public function sale()
+    {
+        return $this->belongsTo(Sale::class);
     }
 }
