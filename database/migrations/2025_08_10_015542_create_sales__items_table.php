@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,9 +14,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sale_id')->constrained('sales')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->string('so_no');
             $table->unsignedInteger('quantity'); // jumlah produk yang dibeli
             $table->decimal('price', 5, 2)->nullable(); // harga produk pada saat transaksi
             $table->timestamps();
+            $table->foreign('so_no')->references('so_no')->on('sales')->onDelete('cascade');
+
             $table->index(['sale_id', 'product_id']); // untuk memfilter item per penjualan
         });
     }
