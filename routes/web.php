@@ -37,11 +37,13 @@ Route::put('update/{id}', [App\Http\Controllers\BookController::class, 'update']
 
 
 Auth::routes();
+Route::get('master', [App\Http\Controllers\DashboardController::class, 'managerIndex'])->name('dashboard');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 //route cashier
 Route::middleware(['auth', 'role:cashier'])->group(function () {
+    
     //sales routing
     Route::get('sales', [App\Http\Controllers\SalesController::class, 'index'])->name('sales.index');
 
@@ -54,6 +56,8 @@ Route::middleware(['auth', 'role:cashier'])->group(function () {
 
 //manager
 Route::middleware(['auth', 'role:manager'])->group(function () {
+    //dashboard manager
+    Route::get('dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
     //rute category
     Route::get('category', [App\Http\Controllers\CategoryController::class, 'index'])->name('category.index')->middleware('role:manager');
     Route::get('create-category', [App\Http\Controllers\CategoryController::class, 'create'])->name('category.create')->middleware('role:manager');
@@ -70,14 +74,4 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
     Route::delete('destroy-product/{id}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('product.destroy');
     Route::get('edit-product/{id}', [App\Http\Controllers\ProductController::class, 'edit'])->name('product.edit');
     Route::put('update-product/{id}', [App\Http\Controllers\ProductController::class, 'update'])->name('product.update');
-
-
-    //sales routing
-    Route::get('sales', [App\Http\Controllers\SalesController::class, 'index'])->name('sales.index');
-
-
-    //route sales item
-    Route::post('sales/items', [App\Http\Controllers\SalesItemController::class, 'store'])->name('sales.items.store');
-    Route::put('sales/items/{id}', [App\Http\Controllers\SalesItemController::class, 'update'])->name('sales.items.update');
-    Route::delete('sales/items/{id}', [App\Http\Controllers\SalesItemController::class, 'destroy'])->name('sales.items.destroy');
 });
