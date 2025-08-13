@@ -5,9 +5,13 @@ use App\Http\Controllers\BelajarController;
 
 
 //default laravel
-Route::get('/', function () {
-    return view('welcome');
-});
+
+// Route::get('/', function () {
+//     return view('layouts.auth');
+// });
+//route login
+Route::get('/', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
 
 //membuat rute baru / membuat jalan baru/ jalur baru 
 //rute baru 
@@ -16,7 +20,7 @@ Route::get('belajar', function () {
 });
 
 //rute baru menampilkan hello world di controller 
-Route::get('master', [App\Http\Controllers\BelajarController::class, 'index']);
+// Route::get('master', [App\Http\Controllers\BelajarController::class, 'index']);
 Route::get('belajar2', [BelajarController::class, 'view']);
 
 Route::get('books', [App\Http\Controllers\BookController::class, 'index'])->name('books.index'); //kasih nama di setiap route yang kita buat
@@ -51,9 +55,9 @@ Route::middleware(['auth', 'role:cashier'])->group(function () {
 //manager
 Route::middleware(['auth', 'role:manager'])->group(function () {
     //rute category
-    Route::get('category', [App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
-    Route::get('create-category', [App\Http\Controllers\CategoryController::class, 'create'])->name('category.create');
-    Route::post('store-category', [App\Http\Controllers\CategoryController::class, 'store'])->name('category.store');
+    Route::get('category', [App\Http\Controllers\CategoryController::class, 'index'])->name('category.index')->middleware('role:manager');
+    Route::get('create-category', [App\Http\Controllers\CategoryController::class, 'create'])->name('category.create')->middleware('role:manager');
+    Route::post('store-category', [App\Http\Controllers\CategoryController::class, 'store'])->name('category.store')->middleware('role:manager');
     //delete
     Route::delete('destroy-category/{id}', [App\Http\Controllers\CategoryController::class, 'destroy'])->name('category.destroy');
     Route::get('edit-category/{id}', [App\Http\Controllers\CategoryController::class, 'edit'])->name('category.edit');
