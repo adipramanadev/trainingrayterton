@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Sales;
 use App\Models\Product;
 use App\Models\Sales_Item;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class SalesController extends Controller
@@ -17,9 +18,10 @@ class SalesController extends Controller
         //get currency 
        
         // $sales = Sales::all();
+        $customers = Customer::all();
         $salesitem = Sales_Item::all();
         $products = Product::all();
-        return view('sales.index', compact( 'products','salesitem'));
+        return view('sales.index', compact( 'products','salesitem','customers'));
     }
 
     /**
