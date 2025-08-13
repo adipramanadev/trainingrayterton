@@ -32,11 +32,14 @@
                                 </tr>
                                 <tr>
                                     <td>Status</td>
-                                    <td><input type="text" name="status" id="status" class="form-control" readonly ></td>
-                                </tr> 
+                                    <td><input type="text" name="status" id="status" class="form-control" readonly>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>Description</td>
-                                    <td><textarea name="description" class="form-control" id="" cols="30" rows="100"></textarea></td>
+                                    <td>
+                                        <textarea name="description" class="form-control" id="" cols="30" rows="100"></textarea>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>&nbsp;</td>
@@ -65,7 +68,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($salesitem as $sale)
+                                    @forelse ($salesitem as $sale)
                                         <tr>
                                             <td>{{ $sale->product->name }}</td>
                                             <td>{{ $sale->quantity }}</td>
@@ -86,63 +89,12 @@
                                                 </form>
                                             </td>
                                         </tr>
+                                    @empty
+                                        <td colspan="5">
+                                            <center>No items found</center>
+                                        </td>
+                                    @endforelse
 
-                                        <!-- Edit Modal -->
-                                        {{-- <div class="modal fade" id="editSaleModal{{ $sale->id }}" tabindex="-1"
-                                                role="dialog">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <form action="{{ route('sales.items.update', $sale->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('PUT')
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Edit Sale Item</h5>
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="form-group">
-                                                                    <label>Product</label>
-                                                                    <select name="product_id"
-                                                                        id="edit_product_id{{ $sale->id }}"
-                                                                        class="form-control">
-                                                                        @foreach ($products as $product)
-                                                                            <option value="{{ $product->id }}"
-                                                                                data-price="{{ $product->price }}"
-                                                                                {{ $product->id == $sale->product_id ? 'selected' : '' }}>
-                                                                                {{ $product->name }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Quantity</label>
-                                                                    <input type="number" name="quantity"
-                                                                        id="edit_quantity{{ $sale->id }}"
-                                                                        value="{{ $sale->quantity }}" class="form-control">
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Price</label>
-                                                                    <input type="number" name="price"
-                                                                        id="edit_price{{ $sale->id }}"
-                                                                        value="{{ $sale->price }}" readonly
-                                                                        class="form-control">
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Close</button>
-                                                                <button type="submit"
-                                                                    class="btn btn-primary">Update</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div> --}}
-                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
