@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+// use App\Http\Requests\Auth\Request;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -25,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/category';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -42,4 +44,12 @@ class LoginController extends Controller
     {
         return view('layouts.auth');
     }
+    //  protected function authenticated(Request $request, $user)
+    // {
+    //     return match ($user->role) {
+    //         'cashier' => redirect()->route('dashboard.cashier'),
+    //         'manager' => redirect()->route('dashboard.manager'),
+    //         default   => redirect($this->redirectTo), // fallback
+    //     };
+    // }
 }

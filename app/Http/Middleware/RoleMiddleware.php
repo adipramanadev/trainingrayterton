@@ -16,12 +16,10 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
         $user = $request->user();
-
-        // Pastikan user login & rolenya sesuai
         if (!$user || !in_array($user->role, $roles, true)) {
-            return redirect()->route('category.index'); // atau redirect()->route('dashboard')
+            // sementara untuk debug, kasih pesan biar kelihatan
+            abort(403, 'Forbidden: butuh role ' . implode(',', $roles) . ', kamu ' . ($user->role ?? 'guest'));
         }
-
         return $next($request);
     }
 }
