@@ -2,28 +2,23 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Models\Product;
-use App\Models\Sales_Item;
 use App\Models\Customer;
+use App\Models\Product;
+use App\Models\Sale;
+use App\Models\Sales_Item;
 use Illuminate\Http\Request;
-use App\Models\Sale; // <-- Model yang benar
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule; // Import Rule untuk validasi unik
 
 class SalesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    // ... metode index dan create tidak berubah ...
+    public function index()
     {
         $sales = Sale::with(['customer', 'user'])->latest()->paginate(10);
         return view('sales.index', compact('sales'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $customers = Customer::all();
@@ -31,12 +26,14 @@ class SalesController extends Controller
         return view('sales.create', compact('customers', 'products'));
     }
 
+
     /**
-     * Store a newly created resource in storage.
+     * **DIUBAH**: Menambahkan validasi dan penyimpanan so_no.
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'so_no' => ['required', 'string', 'max:255', 'unique:sales,so_no'], 
             'customer_id' => ['required', 'exists:customers,id'],
             'currency' => ['required', 'string', 'max:100'],
             'description' => ['nullable', 'string'],
@@ -50,96 +47,107 @@ class SalesController extends Controller
 
         DB::transaction(function () use ($validated, &$sale) {
             $sale = Sale::create([
+                'so_no' => $validated['so_no'], // Simpan so_no
                 'user_id' => auth()->id(),
                 'customer_id' => $validated['customer_id'],
                 'currency' => $validated['currency'],
-                'status' => 'completed',
+                'status' => 'Input',
                 'description' => $validated['description'] ?? null,
             ]);
 
+            // Tambahkan so_no ke setiap item sebelum disimpan
             $items = collect($validated['items'])->map(function ($item) use ($sale) {
-                return [
-                    'sale_id' => $sale->id,
-                    'product_id' => $item['product_id'],
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+                return new Sales_Item($item + ['so_no' => $sale->so_no]);
             });
-
-            Sales_Item::insert($items->all());
+            $sale->items()->saveMany($items);
         });
 
-        return redirect()
-            ->route('sales.show', $sale)
-            ->with('success', "Transaksi #{$sale->id} berhasil dibuat.");
+        return redirect()->route('sales.show', $sale)->with('success', "Transaksi #{$sale->so_no} berhasil dibuat dengan status 'Input'.");
     }
 
-    /**
-     * Display the specified resource.
-     * * @param \App\Models\Sale $sale
-     * @return \Illuminate\Http\Response
-     */
-    // DIUBAH: dari "Sales $sales" menjadi "Sale $sale"
     public function show(Sale $sale)
     {
         $sale->load(['customer', 'user', 'items.product']);
         return view('sales.show', compact('sale'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Sale $sale
-     * @return \Illuminate\Http\Response
-     */
-    // DIUBAH: dari "Sales $sales" menjadi "Sale $sale"
     public function edit(Sale $sale)
     {
+        $sale->load('items.product');
         $customers = Customer::all();
-        return view('sales.edit', compact('sale', 'customers'));
+        $products = Product::all();
+        return view('sales.edit', compact('sale', 'customers', 'products'));
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Sale $sale
-     * @return \Illuminate\Http\Response
+     * **DIUBAH**: so_no tidak bisa diedit, jadi tidak perlu divalidasi/diupdate.
+     * Logika lain tetap sama.
      */
-    // DIUBAH: dari "Sales $sales" menjadi "Sale $sale"
     public function update(Request $request, Sale $sale)
     {
+        // so_no sebagai unique identifier sebaiknya tidak diubah.
+        // Jika ingin bisa diubah, tambahkan validasi dan logika update di sini.
+        if ($sale->status !== 'Input') {
+            return redirect()->route('sales.show', $sale)->with('error', 'Transaksi yang sudah selesai tidak dapat diubah.');
+        }
+
         $validated = $request->validate([
             'customer_id' => ['required', 'exists:customers,id'],
             'currency' => ['required', 'string', 'max:100'],
             'description' => ['nullable', 'string'],
+            'items' => ['required', 'array', 'min:1'],
+            'items.*.id' => ['nullable', 'exists:sales_items,id'],
+            'items.*.product_id' => ['required', 'exists:products,id'],
+            'items.*.quantity' => ['required', 'integer', 'min:1'],
+            'items.*.price' => ['required', 'numeric', 'min:0'],
         ]);
 
-        $sale->update($validated);
+        DB::transaction(function () use ($validated, $sale) {
+            $sale->update([
+                'customer_id' => $validated['customer_id'],
+                'currency' => $validated['currency'],
+                'description' => $validated['description'],
+            ]);
 
-        return redirect()
-            ->route('sales.show', $sale)
-            ->with('success', "Transaksi #{$sale->id} berhasil diperbarui.");
+            $incomingItemIds = collect($validated['items'])->pluck('id')->filter();
+            $sale->items()->whereNotIn('id', $incomingItemIds)->delete();
+
+            foreach ($validated['items'] as $itemData) {
+                $sale->items()->updateOrCreate(
+                    ['id' => $itemData['id'] ?? null],
+                    $itemData + ['so_no' => $sale->so_no] // Pastikan so_no tetap ada untuk item baru
+                );
+            }
+        });
+
+        return redirect()->route('sales.show', $sale)->with('success', "Transaksi #{$sale->so_no} berhasil diperbarui.");
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Sale $sale
-     * @return \Illuminate\Http\Response
-     */
-    // DIUBAH: dari "Sales $sales" menjadi "Sale $sale"
+    
+    // ... metode destroy, complete, dan cancel tidak berubah ...
     public function destroy(Sale $sale)
     {
         DB::transaction(function () use ($sale) {
             $sale->items()->delete();
             $sale->delete();
         });
-
-        return redirect()
-            ->route('sales.index')
-            ->with('success', "Transaksi #{$sale->id} berhasil dihapus.");
+        return redirect()->route('sales.index')->with('success', "Transaksi #{$sale->so_no} berhasil dihapus.");
+    }
+    public function complete(Sale $sale)
+    {
+        if ($sale->status === 'Input') {
+            $sale->status = 'completed';
+            $sale->save();
+            return redirect()->route('sales.show', $sale)->with('success', 'Transaksi berhasil diselesaikan!');
+        }
+        return redirect()->route('sales.show', $sale)->with('error', 'Transaksi ini sudah selesai sebelumnya.');
+    }
+    public function cancel(Sale $sale)
+    {
+        if ($sale->status === 'completed') {
+            $sale->status = 'Input';
+            $sale->save();
+            return redirect()->route('sales.show', $sale)->with('success', 'Transaksi berhasil dibatalkan dan status dikembalikan ke Input.');
+        }
+        return redirect()->route('sales.show', $sale)->with('error', 'Hanya transaksi yang sudah selesai yang dapat dibatalkan.');
     }
 }

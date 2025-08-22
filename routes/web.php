@@ -52,6 +52,8 @@ Route::middleware(['auth', 'role:cashier'])->group(function () {
     // Route::post('sales/items', [App\Http\Controllers\SalesItemController::class, 'store'])->name('sales.items.store');
     // Route::put('sales/items/{id}', [App\Http\Controllers\SalesItemController::class, 'update'])->name('sales.items.update');
     // Route::delete('sales/items/{id}', [App\Http\Controllers\SalesItemController::class, 'destroy'])->name('sales.items.destroy');
+    Route::post('sales/{sale}/cancel', [SalesController::class, 'cancel'])->name('sales.cancel');
+    Route::post('sales/{sale}/complete', [SalesController::class, 'complete'])->name('sales.complete');
     Route::resource('sales', SalesController::class);
 });
 

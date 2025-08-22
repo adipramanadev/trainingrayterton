@@ -27,6 +27,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>SO Number</th>
                                 <th>Customer</th>
                                 <th>Cashier</th>
                                 <th>Date</th>
@@ -39,6 +40,7 @@
                             @forelse ($sales as $sale)
                                 <tr>
                                     <td>#{{ $sale->id }}</td>
+                                    <td>{{ $sale->so_no }}</td>
                                     <td>{{ $sale->customer->namecustomer }}</td>
                                     <td>{{ $sale->user->name }}</td>
                                     <td>{{ $sale->created_at->format('d-m-Y') }}</td>
